@@ -34,3 +34,14 @@ resource "aws_s3_bucket_public_access_block" "eduflow_public_block" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+
+## Membuat VPC Gateway agar Backend EC2 tidak perlu melewati NAT untuk akses S3 (Cost Optimization)
+resource "aws_vpc_endpoint" "s3_endpoint" {
+  vpc_id = var.vpc_id
+  service_name = "com.amazonaws.${var.region}.s3"
+
+  route_table_ids = [var.private_route_table_id]
+  tags = {
+    Name = "eduflow-s3-endpoint"
+  }
+}
