@@ -59,16 +59,30 @@ resource "aws_iam_role" "ec2_s3_role" {
   })
 }
 
-resource "aws_iam_role_policy" "s3_access_policy" {
-  name = "eduflow_s3_access"
+resource "aws_iam_role_policy" "ec2_policy" {
+  name = "eduflow_ec2_policy"
   role = aws_iam_role.ec2_s3_role.id
   policy = jsonencode({
     Version = "2012-10-17"
-    Statement = [{
-      Action = ["s3:GetObject", "s3:ListBucket"]
-      Effect = "Allow"
-      Resource = [var.s3_bucket_arn, "${var.s3_bucket_arn}/*"]
-    }]
+    Statement = [
+      {
+        # Izin untuk membaca materi di S3
+        Action = ["s3:GetObject", "s3:ListBucket"]
+        Effect = "Allow"
+        Resource = [var.s3_bucket_arn, "${var.s3_bucket_arn}/*"]
+      },
+      {
+        # Izin untuk mengirim Log server ke CloudWatch
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:DescribeLogStreams"
+        ]
+        Effect = "Allow"
+        Resource = "arn:aws:logs:*:*:*"
+      }
+    ]
   })
 }
 
@@ -91,6 +105,14 @@ resource "aws_lb_target_group" "app_tg" {
   port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
+
+  health_check {
+  path                = "/"
+  healthy_threshold   = 2
+  unhealthy_threshold = 2
+  timeout             = 3
+  interval            = 30
+}
 }
 
 resource "aws_lb_listener" "http" {
@@ -117,22 +139,8 @@ resource "aws_launch_template" "app_lt" {
     security_groups = [aws_security_group.ec2_sg.id]
   }
 
-  # Script otomatis saat EC2 menyala (Bootstrap)
-  user_data = base64encode(<<-EOF
-              #!/bin/bash
-              dnf update -y
-              dnf install -y httpd
-              systemctl start httpd
-              systemctl enable httpd
-              echo "<h1>Welcome to EduFlow LMS - Running on AWS Auto Scaling!</h1>" > /var/www/html/index.html
-              
-              dnf update -y
-              dnf install -y httpd
-              systemctl start httpd
-              systemctl enable httpd
-              echo "<h1>Welcome to EduFlow LMS - Running on AWS Auto Scaling!</h1>" > /var/www/html/index.html
-              EOF
-  )
+  # Memanggil skrip Bootstrap dari file eksternal (user_data.sh)
+  user_data = filebase64("${path.module}/user_data.sh")
 }
 
 resource "aws_autoscaling_group" "app_asg" {
@@ -147,3 +155,4 @@ resource "aws_autoscaling_group" "app_asg" {
     version = "$Latest"
   }
 }
+

@@ -8,7 +8,7 @@ variable "db_password" {
   description = "Password for database RDS EduFlow"
   type        = string
   sensitive   = true
-  default     = "EduflowAdmin123!"
+  
 }
 
 variable "admin_email" {

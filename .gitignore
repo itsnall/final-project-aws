@@ -1,1 +1,20 @@
-.terraform
+# Mengabaikan direktori instalasi provider Terraform
+.terraform/
+
+# Mengabaikan file state yang berisi peta AWS Anda (SANGAT PENTING)
+*.tfstate
+*.tfstate.*
+
+# Mengabaikan log error
+crash.log
+crash.*.log
+
+# Mengabaikan file variabel rahasia (SANGAT PENTING)
+*.tfvars
+*.tfvars.json
+
+# Mengabaikan file override
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
