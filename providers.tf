@@ -3,7 +3,7 @@ terraform {
 
   # Konfigurasi Backend (Pastikan Bucket & DynamoDB sudah dibuat di Console)
   backend "s3" {
-    bucket         = "eduflow-tfstate-final-project" 
+    bucket         = "eduflow-tfstate-final-project"
     key            = "final/terraform.tfstate"
     region         = "ap-southeast-1" # Sesuaikan region
     dynamodb_table = "terraform-lock-table"
