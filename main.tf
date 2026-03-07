@@ -16,7 +16,7 @@ module "database" {
 
 module "storage" {
   source      = "./modules/storage"
-  bucket_name = "eduflow-tfstate-final-project4" 
+  bucket_name = "eduflow-tfstate-final-project4"
 }
 
 module "compute" {
@@ -25,9 +25,10 @@ module "compute" {
   public_subnets      = module.networking.public_subnets
   private_app_subnets = module.networking.private_app_subnets
   s3_bucket_arn       = module.storage.bucket_arn
+  acm_certificate_arn = var.acm_certificate_arn
 }
 output "eduflow_url" {
-  value = "http://${module.compute.alb_dns_name}"
+  value = "https://${module.compute.alb_dns_name}"
 }
 
 module "monitoring" {

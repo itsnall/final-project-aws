@@ -4,6 +4,11 @@ variable "region" {
   default     = "ap-southeast-1" 
 }
 
+variable "acm_certificate_arn" {
+  description = "ARN sertifikat ACM yang sudah ISSUED di region yang sama dengan ALB"
+  type        = string
+}
+
 variable "db_password" {
   description = "Password for database RDS EduFlow"
   type        = string
