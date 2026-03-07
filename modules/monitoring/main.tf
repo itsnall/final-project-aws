@@ -14,8 +14,8 @@ resource "aws_sns_topic_subscription" "email_alert" {
 resource "aws_cloudwatch_metric_alarm" "high_cpu" {
   alarm_name          = "eduflow-high-cpu-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"               # Dipantau selama 2 periode berturut-turut
-  period              = "120"             # 1 periode = 120 detik (2 menit)
+  evaluation_periods  = "2"               
+  period              = "120"             
   metric_name         = "CPUUtilization"
   namespace           = "AWS/EC2"
   statistic           = "Average"
