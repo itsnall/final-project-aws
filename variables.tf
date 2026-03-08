@@ -4,12 +4,6 @@ variable "region" {
   default     = "ap-southeast-1"
 }
 
-variable "db_password" {
-  description = "Password for database RDS EduFlow"
-  type        = string
-  sensitive   = true
-}
-
 variable "admin_email" {
   description = "Email administrator untuk menerima notifikasi"
   type        = string
