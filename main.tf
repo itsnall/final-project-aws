@@ -30,7 +30,8 @@ module "compute" {
   s3_bucket_arn       = module.storage.bucket_arn
   acm_certificate_arn = var.acm_certificate_arn
   db_endpoint         = module.database.db_endpoint
-  db_password         = var.db_password
+  db_password         = module.database.db_password
+
 }
 output "eduflow_url" {
   value = "https://${module.compute.alb_dns_name}"
