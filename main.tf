@@ -11,12 +11,14 @@ module "database" {
   source        = "./modules/database"
   vpc_id        = module.networking.vpc_id
   db_subnet_ids = module.networking.db_subnet_ids
-  db_password   = var.db_password
 }
 
 module "storage" {
-  source      = "./modules/storage"
-  bucket_name = "eduflow-tfstate-final-project4"
+  source                 = "./modules/storage"
+  bucket_name            = "eduflow-tfstate-final-project4"
+  region                 = var.region
+  vpc_id                 = module.networking.vpc_id
+  private_route_table_id = module.networking.private_route_table_id
 }
 
 module "compute" {

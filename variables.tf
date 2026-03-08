@@ -1,7 +1,7 @@
 variable "region" {
   description = "AWS Region Create"
   type        = string
-  default     = "ap-southeast-1" 
+  default     = "ap-southeast-1"
 }
 
 variable "acm_certificate_arn" {
@@ -19,5 +19,11 @@ variable "db_password" {
 variable "admin_email" {
   description = "Email administrator untuk menerima notifikasi"
   type        = string
-  default     = "andiisnal18@gmail.com" 
+  default     = "andiisnal18@gmail.com"
+}
+
+variable "db_password" {
+  description = "Password untuk database RDS EduFlow"
+  type        = string
+  sensitive   = true
 }
