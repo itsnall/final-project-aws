@@ -45,7 +45,7 @@ resource "aws_db_instance" "main" {
   password                = local.db_creds.password
   db_subnet_group_name    = aws_db_subnet_group.rds_subnet_group.name
   multi_az                = true
-  backup_retention_period = 7 # Simpan backup selama 7 hari
+  backup_retention_period = 1 # Simpan backup selama 7 hari
   vpc_security_group_ids  = [aws_security_group.rds_sg.id]
   publicly_accessible     = false
   skip_final_snapshot     = true
