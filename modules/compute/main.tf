@@ -242,7 +242,7 @@ resource "aws_launch_template" "web_lt" {
     security_groups             = [aws_security_group.web_ec2_sg.id]
   }
 
-  user_data = base64encode(templatefile("${path.module}/user_data.sh", {
+  user_data = base64encode(templatefile("${path.module}/web_user_data.sh", {
     internal_alb_dns_name = aws_lb.internal_alb.dns_name
   }))
 }
@@ -276,7 +276,6 @@ resource "aws_launch_template" "app_lt" {
     security_groups = [aws_security_group.app_ec2_sg.id]
   }
 
-  # Memanggil skrip Bootstrap dari file eksternal (user_data.sh)
   user_data = base64encode(templatefile("${path.module}/user_data.sh",{
     rds_endpoint = var.db_endpoint
     rds_password = var.db_password
