@@ -5,6 +5,7 @@ module "networking" {
   app_cidrs    = ["10.0.10.0/24", "10.0.11.0/24"]
   db_cidrs     = ["10.0.20.0/24", "10.0.21.0/24"]
   azs          = ["ap-southeast-1a", "ap-southeast-1b"]
+  
 }
 
 module "database" {
@@ -27,7 +28,9 @@ module "compute" {
   public_subnets      = module.networking.public_subnets
   private_app_subnets = module.networking.private_app_subnets
   s3_bucket_arn       = module.storage.bucket_arn
-  # acm_certificate_arn = var.acm_certificate_arn
+  acm_certificate_arn = var.acm_certificate_arn
+  db_endpoint         = module.database.db_endpoint
+  db_password         = var.db_password
 }
 output "eduflow_url" {
   value = "https://${module.compute.alb_dns_name}"
@@ -38,6 +41,3 @@ module "monitoring" {
   asg_name    = module.compute.asg_name
   admin_email = var.admin_email
 }
-
-
-

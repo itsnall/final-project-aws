@@ -15,8 +15,9 @@ rm -rf /var/www/html/*
 # Unduh (clone) kode aplikasi LMS Anda dari GitHub
 # GANTI TAUTAN DI BAWAH dengan URL repositori GitHub aplikasi Anda
 git clone https://github.com/itsnall/eduflow-app.git /var/www/html/
-
-
+sed -i "s/REPLACE_WITH_RDS_ENDPOINT/${rds_endpoint}/g" /var/www/html/config.php
+sed -i "s/REPLACE_WITH_DB_USER/admin/g" /var/www/html/config.php
+sed -i "s/REPLACE_WITH_DB_PASS/${rds_password}/g" /var/www/html/config.php
 
 # Berikan izin akses folder kepada web server Apache
 chown -R apache:apache /var/www/html/

@@ -3,3 +3,10 @@ variable "public_subnets" { type = list(string) }
 variable "private_app_subnets" { type = list(string) }
 variable "s3_bucket_arn" { type = string }
 variable "acm_certificate_arn" { type = string }
+variable "db_endpoint" { 
+  type = string 
+}
+variable "db_password" { 
+  type = string 
+  sensitive = true 
+}

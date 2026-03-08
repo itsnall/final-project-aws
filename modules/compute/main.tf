@@ -277,7 +277,10 @@ resource "aws_launch_template" "app_lt" {
   }
 
   # Memanggil skrip Bootstrap dari file eksternal (user_data.sh)
-  user_data = filebase64("${path.module}/user_data.sh")
+  user_data = base64encode(templatefile("${path.module}/user_data.sh",{
+    rds_endpoint = var.db_endpoint
+    rds_password = var.db_password
+  }))
 }
 
 resource "aws_autoscaling_group" "app_asg" {
