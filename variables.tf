@@ -9,3 +9,9 @@ variable "admin_email" {
   type        = string
   default     = "andiisnal18@gmail.com"
 }
+
+variable "db_password" {
+  description = "Password untuk database RDS EduFlow"
+  type        = string
+  sensitive   = true
+}
