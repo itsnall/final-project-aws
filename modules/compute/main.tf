@@ -115,7 +115,7 @@ resource "aws_iam_role_policy" "ec2_policy" {
     Statement = [
       {
         # Izin untuk membaca materi di S3
-        Action = ["s3:GetObject", "s3:ListBucket"]
+        Action = ["s3:GetObject", "s3:ListBucket", "s3:PutObject"]
         Effect = "Allow"
         Resource = [var.s3_bucket_arn, "${var.s3_bucket_arn}/*"]
       },
@@ -292,6 +292,34 @@ resource "aws_autoscaling_group" "app_asg" {
   launch_template {
     id      = aws_launch_template.app_lt.id 
     version = "$Latest"
+  }
+}
+
+# 1. Policy untuk Web Tier
+resource "aws_autoscaling_policy" "web_cpu_policy" {
+  name                   = "web-cpu-target-tracking-policy"
+  autoscaling_group_name = aws_autoscaling_group.web_asg.name
+  policy_type            = "TargetTrackingScaling"
+
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+    target_value = 50.0 
+  }
+}
+
+# 2. Policy untuk App Tier
+resource "aws_autoscaling_policy" "app_cpu_policy" {
+  name                   = "app-cpu-target-tracking-policy"
+  autoscaling_group_name = aws_autoscaling_group.app_asg.name
+  policy_type            = "TargetTrackingScaling"
+
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+    target_value = 50.0 
   }
 }
 
