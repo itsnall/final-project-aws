@@ -29,3 +29,32 @@ resource "aws_cloudwatch_metric_alarm" "high_cpu" {
     AutoScalingGroupName = var.asg_name
   }
 }
+
+# 4. Autoscaling Policy for Scale-In
+resource "aws_autoscaling_policy" "scale_in" {
+  name                   = "eduflow-scale-in-policy"
+  scaling_adjustment     = -1  # Mengurangi 1 instans EC2
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 300 
+  autoscaling_group_name = var.asg_name
+}
+
+# 5. Alarm CloudWatch untuk Low CPU Usage (Scale-In)
+resource "aws_cloudwatch_metric_alarm" "low_cpu" {
+  alarm_name          = "eduflow-low-cpu-alarm"
+  comparison_operator = "LessThanOrEqualToThreshold"
+  evaluation_periods  = "1"                
+  period              = "60"               
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  statistic           = "Average"
+  threshold           = "30"               
+  alarm_description   = "Mengurangi instans jika rata-rata CPU di bawah 30% selama 1 menit"
+
+  # Tindakan jika alarm terpicu: Jalankan policy scale-in
+  alarm_actions       = [aws_autoscaling_policy.scale_in.arn]
+
+  dimensions = {
+    AutoScalingGroupName = var.asg_name
+  }
+}
