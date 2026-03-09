@@ -19,8 +19,8 @@ resource "aws_cloudwatch_metric_alarm" "high_cpu" {
   metric_name         = "CPUUtilization"
   namespace           = "AWS/EC2"
   statistic           = "Average" 
-  threshold           = "80"              # Batas CPU 80%
-  alarm_description   = "Mengirim email jika rata-rata CPU EC2 di ASG melebihi 80%"
+  threshold           = "50"              
+  alarm_description   = "Mengirim email jika rata-rata CPU EC2 di ASG melebihi 50%"
   
   # Tindakan jika alarm terpicu: Kirim pesan ke SNS Topic
   alarm_actions       = [aws_sns_topic.eduflow_alerts.arn]
