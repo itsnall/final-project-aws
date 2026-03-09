@@ -295,31 +295,3 @@ resource "aws_autoscaling_group" "app_asg" {
   }
 }
 
-# 1. Policy untuk Web Tier
-resource "aws_autoscaling_policy" "web_cpu_policy" {
-  name                   = "web-cpu-target-tracking-policy"
-  autoscaling_group_name = aws_autoscaling_group.web_asg.name
-  policy_type            = "TargetTrackingScaling"
-
-  target_tracking_configuration {
-    predefined_metric_specification {
-      predefined_metric_type = "ASGAverageCPUUtilization"
-    }
-    target_value = 50.0 
-  }
-}
-
-# 2. Policy untuk App Tier
-resource "aws_autoscaling_policy" "app_cpu_policy" {
-  name                   = "app-cpu-target-tracking-policy"
-  autoscaling_group_name = aws_autoscaling_group.app_asg.name
-  policy_type            = "TargetTrackingScaling"
-
-  target_tracking_configuration {
-    predefined_metric_specification {
-      predefined_metric_type = "ASGAverageCPUUtilization"
-    }
-    target_value = 50.0 
-  }
-}
-
